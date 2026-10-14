@@ -31,6 +31,24 @@ Scopes:
 
 The owner list still shows raw notes. That view is the vault. The answer path is the one that gets filtered and redacted.
 
+## Screenshots
+
+Seeded vault. Eight notes across private, shared, and public. The header shows which runtime is active.
+
+![Seeded vault with tier badges](docs/vault-home.png)
+
+Storing a clinic note. The router chooses store. The privacy guard flags phone and health and keeps the tier private. The redacted form is saved beside the raw line.
+
+![Private note with phone and health flags](docs/store-private.png)
+
+Team scope. The Qdrant filter is shared or public. The answer cites the standup note. The private clinic line stays in the owner list and out of the citation.
+
+![Team scope query citing only a shared note](docs/team-query.png)
+
+Me scope. The private note is allowed through, and the phone number and health detail are redacted before the answer agent. The audit row names that chunk.
+
+![Me scope answer with redacted PII](docs/me-redaction.png)
+
 ## Run
 
 ```bash
