@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VaultVoice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,520;9..144,640&family=Outfit:wght@380;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="brand">
+        <span class="mark" aria-hidden="true"></span>
+        <div>
+          <h1>VaultVoice</h1>
+          <p>Speak a note. The vault decides who can hear it back.</p>
+        </div>
+      </div>
+      <div class="pills" id="pills" aria-label="Runtime mode">
+        <span class="pill">Loading the vault...</span>
+      </div>
+    </header>
+
+    <ol class="pipeline" id="pipeline">
+      <li data-step="voice">Voice</li>
+      <li data-step="router">Router</li>
+      <li data-step="guard">Privacy Guard</li>
+      <li data-step="qdrant">Qdrant</li>
+      <li data-step="answer">Answer</li>
+      <li data-step="audit">Audit</li>
+    </ol>
+
+    <aside class="panel notes" aria-labelledby="notes-title">
+      <div class="panel-head">
+        <h2 id="notes-title">Owner vault</h2>
+        <span class="count" id="note-count">0</span>
+      </div>
+      <p class="hint">Raw text stays here. Queries only receive what the scope allows, and private PII is redacted on the way out.</p>
+      <div id="notes" class="stack">
+        <p class="empty">Loading notes...</p>
+      </div>
+    </aside>
+
+    <section class="stage">
+      <div class="panel composer">
+        <div class="panel-head">
+          <h2>Loop</h2>
+          <span class="live-label" id="mic-label">Mic idle</span>
+        </div>
+        <label class="sr" for="composer">Note or question</label>
+        <textarea id="composer" rows="3" placeholder="Speak or type a note, or ask the vault something."></textarea>
+        <p class="hint" id="voice-hint">Transcription stays in this browser. Audio is not uploaded.</p>
+        <div class="controls">
+          <button type="button" class="mic" id="mic" aria-pressed="false" aria-label="Start voice input">
+            <span class="mic-icon" aria-hidden="true"></span>
+          </button>
+          <fieldset>
+            <legend>Tier on store</legend>
+            <div class="seg" role="radiogroup" aria-label="Privacy tier">
+              <label><input type="radio" name="tier" value="auto" checked> Auto</label>
+              <label><input type="radio" name="tier" value="private"> Private</label>
+              <label><input type="radio" name="tier" value="shared"> Shared</label>
+              <label><input type="radio" name="tier" value="public"> Public</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Scope on query</legend>
+            <div class="seg" role="radiogroup" aria-label="Access scope">
+              <label><input type="radio" name="scope" value="me" checked> Me</label>
+              <label><input type="radio" name="scope" value="team"> Team</label>
+              <label><input type="radio" name="scope" value="public"> Public</label>
+            </div>
+          </fieldset>
+          <button type="button" class="run" id="run">Run the loop</button>
+        </div>
+        <div class="chips" aria-label="Examples">
+          <button type="button" class="chip" data-text="Call Dr. Mehta about my blood pressure meds. Clinic number is 415-555-0198." data-tier="auto" data-scope="me">Clinic note</button>
+          <button type="button" class="chip" data-text="Team standup moved to 10:15 in the oak room. Bring the Q3 launch checklist." data-tier="auto" data-scope="team">Standup note</button>
+          <button type="button" class="chip" data-text="When is team standup and what should I bring?" data-tier="auto" data-scope="team">Ask the team</button>
+          <button type="button" class="chip" data-text="What did I say about my blood pressure and the clinic number?" data-tier="auto" data-scope="me">Ask as me</button>
+        </div>
+      </div>
+
+      <div class="panel result" id="result" aria-live="polite">
+        <div class="empty-result">
+          <p class="kicker">Waiting for a turn</p>
+          <p>A statement is stored with a tier. A question is answered from the scope you picked. The router chooses which path.</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel audit" aria-labelledby="audit-title">
+      <div class="panel-head">
+        <h2 id="audit-title">Audit</h2>
+        <span class="count" id="audit-count">0</span>
+      </div>
+      <p class="hint">Each answer lists the exact chunks the agent was allowed to see.</p>
+      <div id="audit" class="stack">
+        <p class="empty">No turns yet.</p>
+      </div>
+    </aside>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
